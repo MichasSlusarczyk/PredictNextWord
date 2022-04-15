@@ -10,17 +10,15 @@ from keras.models import Sequential, load_model
 from keras.callbacks import ModelCheckpoint
 from keras.utils.np_utils import to_categorical
 
-os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
-
 
 def predict_next_words(model, tokenizer, text):
     sequence = tokenizer.texts_to_sequences([text])
     sequence = np.array(sequence)
-    preds = np.argmax(model.predict(sequence))
+    predictions = np.argmax(model.predict(sequence))
     predicted_word = ""
 
     for key, value in tokenizer.word_index.items():
-        if value == preds:
+        if value == predictions:
             predicted_word = key
             break
 
@@ -29,6 +27,12 @@ def predict_next_words(model, tokenizer, text):
 
 
 def main():
+    os.environ['CUDA_VISIBLE_DEVICES'] = '-1'  # 0 dla gpu, -1 dla cpu
+
+    physical_devices = tensorflow.config.experimental.list_physical_devices('GPU')
+    print(physical_devices)
+    if physical_devices:
+        tensorflow.config.experimental.set_memory_growth(physical_devices[0], True)
 
     file = open("Pride.txt", "r", encoding="utf8")
 
@@ -40,7 +44,7 @@ def main():
     # Convert list to string
     data = ""
     for i in lines:
-        data = ' '.join(i)
+        data = ' '.join(lines)
 
     # replace unnecessary stuff with space
     data = \
@@ -52,6 +56,8 @@ def main():
     data = ' '.join(data)
     # data[:500]
 
+    # len(data)
+
     tokenizer = Tokenizer()
     tokenizer.fit_on_texts([data])
 
@@ -59,9 +65,9 @@ def main():
     pickle.dump(tokenizer, open('token.pkl', 'wb'))
 
     sequence_data = tokenizer.texts_to_sequences([data])[0]
-    sequence_data = sequence_data[:15]
+    # sequence_data[:15]
 
-    len(sequence_data)
+    # len(sequence_data)
 
     vocab_size = len(tokenizer.word_index) + 1
     print(vocab_size)
