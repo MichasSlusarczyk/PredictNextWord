@@ -13,7 +13,7 @@
 - Tensorflow library
 
 ## Features
-- Posibility for predicion the next word in the sentence 
+- Possibility for predicion the next word in the sentence 
 - Few propositions of next possible word.
 
 ## Project Status
