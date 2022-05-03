@@ -1,4 +1,4 @@
-# Project Name
+# Prediction of Next Word
 > Application for prediction next word in sentence.
 
 ## Table of Contents
